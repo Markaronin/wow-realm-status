@@ -48,7 +48,7 @@ fn watch_realm_status(realm_name: &str) {
         } else {
             format!("offline").red()
         };
-        println!("{current_time} The realm Bleeding Hollow is {blurb}");
+        println!("{current_time} The realm {realm_name} is {blurb}");
 
         std::thread::sleep(Duration::from_secs(5));
 
