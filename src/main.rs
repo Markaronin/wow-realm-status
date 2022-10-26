@@ -36,7 +36,7 @@ fn get_realm_status(client: &Client, realm_name: &str) -> ResponseDataRealm {
         .expect("Couldn't find your realm in the list of realms")
 }
 
-fn watch_realm_status(realm_name: &str) {
+fn watch_realm_status(realm_name: &str, wait_time: u64) {
     let client = Client::new();
 
     loop {
@@ -50,7 +50,7 @@ fn watch_realm_status(realm_name: &str) {
         };
         println!("{current_time} The realm {realm_name} is {blurb}");
 
-        std::thread::sleep(Duration::from_secs(5));
+        std::thread::sleep(Duration::from_secs(wait_time));
 
         if realm.online {
             break;
@@ -64,10 +64,18 @@ fn watch_realm_status(realm_name: &str) {
 struct Args {
     #[arg(short, long)]
     realm: String,
+
+    #[arg(
+        short,
+        long,
+        help = "Time between realm status refreshes",
+        default_value = "5"
+    )]
+    wait_time: u64,
 }
 
 fn main() {
     let args = Args::parse();
 
-    watch_realm_status(&args.realm);
+    watch_realm_status(&args.realm, args.wait_time);
 }
